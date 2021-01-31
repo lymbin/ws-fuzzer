@@ -29,21 +29,22 @@ def gen_from_dict(dictionary):
     i = False
     for x in dictionary:
         fuzz = open(filename, "a")
+        if (i is True):
+            fuzz.write('''    s_static(",")\n''') 
         fuzz.write('''    s_static("\\"''' + x + '''\\"")
     s_delim(":", fuzzable=False)\n''')
         fuzz.close()
         if type(dictionary[x]) is dict:
             fuzzd = open(filename, "a")
-            if (i is True):
-                fuzzd.write('''    s_static(",")\n''') 
             fuzzd.write('''    s_static("{")\n''')
             fuzzd.close()
             print("%s: dictionary" % (x))
             gen_from_dict(dictionary[x])
+            fuzzd = open(filename, "a")
+            fuzzd.write('''    s_static("}")\n''')
+            fuzzd.close()
         elif type(dictionary[x]) is str:
             fuzzs = open(filename, "a")
-            if (i is True):
-                fuzzs.write('''    s_static(",")\n''') 
             fuzzs.write('''    s_delim("\\"", fuzzable=False)
     s_string("''' + dictionary[x] + '''")
     s_delim("\\"", fuzzable=False)\n''')
@@ -51,8 +52,6 @@ def gen_from_dict(dictionary):
             print("%s: %s" % (x, dictionary[x]))
         elif type(dictionary[x]) is int:
             fuzzi = open(filename, "a")
-            if (i is True):
-                fuzzi.write('''    s_static(",")\n''') 
             fuzzi.write('''    s_string("''' + str(dictionary[x]) + '''", fuzzable=False)\n''')
             fuzzi.close()
             print("%s: %d" % (x, dictionary[x]))
@@ -89,7 +88,6 @@ def define_proto_static(session):
 def write_close():
     fuzz = open(filename, "a")
     fuzz.write('''    s_static("}")
-    s_static("\\r\\n")
 
     session.connect(s_get("websocket"))
 
