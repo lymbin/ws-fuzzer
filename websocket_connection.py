@@ -1,3 +1,5 @@
+# This file is a part of Websockets BooFuzz Fuzzer
+
 from __future__ import absolute_import
 
 import errno
@@ -18,7 +20,6 @@ def open_connection(url):
     ws = websocket.WebSocket(sslopt={"cert_reqs": ssl.CERT_NONE})
     ws.connect(url, http_proxy_host="localhost", http_proxy_port=8080, header=["User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:84.0) Gecko/20100101 Firefox/84.0"])
     return ws
-
 
 class WSConnection(base_socket_connection.BaseSocketConnection):
     """BaseSocketConnection implementation for use with TCP Sockets.
@@ -101,4 +102,4 @@ class WSConnection(base_socket_connection.BaseSocketConnection):
 
     @property
     def info(self):
-        return "{0}:{1}".format(self.host, self.port)
+        return "{0}".format(self.host)

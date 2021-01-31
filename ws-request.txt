@@ -1,0 +1,21 @@
+{
+	"method":9,
+	"params":{
+		"data":{
+			"method":"authentication",
+			"params":{
+				"email":"mail@test.com",
+				"signature":{
+					"timestamp":{
+						"seconds":1612110443,
+						"nanos":900000000
+					},
+					"signature":"4f6dcdb054d2fd548ce0a775003ddb12ec0bb1859ff1ec0e72735b1ae9c0d1b73569aa1459d56c0ffd4a01ae20ab81c1d009fc922ea2f179c6ca14eb02d89b25"
+				},
+				"code":"123",
+				"traceId":"411686823074009088"
+			}
+		}
+	},
+	"id":4
+}
