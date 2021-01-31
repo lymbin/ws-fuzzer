@@ -20,5 +20,5 @@
 
 ## Links
 
-[BooFuzz](https://github.com/jtpereyda/boofuzz)
-[Boo-Gen HTTP Version](https://github.com/h0mbre/CTP-OSCE/tree/master/Boo-Gen)
+* [BooFuzz](https://github.com/jtpereyda/boofuzz)
+* [Boo-Gen HTTP Version](https://github.com/h0mbre/CTP-OSCE/tree/master/Boo-Gen)
