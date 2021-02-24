@@ -16,9 +16,13 @@ from boofuzz.connections import base_socket_connection
 from websocket._exceptions import WebSocketConnectionClosedException
 
 # ignore ssl certificate so that I can use ZAP Proxy for monitoring
-def open_connection(url):
-    ws = websocket.WebSocket(sslopt={"cert_reqs": ssl.CERT_NONE})
-    ws.connect(url, http_proxy_host="localhost", http_proxy_port=8080, header=["User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:84.0) Gecko/20100101 Firefox/84.0"])
+def open_connection(url, proxy, headers):
+    if proxy:
+        ws = websocket.WebSocket(sslopt={"cert_reqs": ssl.CERT_NONE})
+        ws.connect(url, http_proxy_host="localhost", http_proxy_port=8080, header=headers)
+    else:
+        ws = websocket.WebSocket()
+        ws.connect(url, header=headers)
     return ws
 
 class WSConnection(base_socket_connection.BaseSocketConnection):
@@ -32,12 +36,14 @@ class WSConnection(base_socket_connection.BaseSocketConnection):
         server (bool): Set to True to enable server side fuzzing.
     """
 
-    def __init__(self, host, port, send_timeout=5.0, recv_timeout=5.0, server=False):
+    def __init__(self, host, port, proxy, headers, send_timeout=5.0, recv_timeout=5.0, server=False):
         super(WSConnection, self).__init__(send_timeout, recv_timeout)
 
         self.host = host
         self.port = port
         self.server = server
+        self.proxy = proxy
+        self.headers = headers
 
     def close(self):
         if self._sock:
@@ -45,7 +51,7 @@ class WSConnection(base_socket_connection.BaseSocketConnection):
         super(WSConnection, self).close()
 
     def open(self):
-        self._sock = open_connection(self.host)
+        self._sock = open_connection(self.host, self.proxy, self.headers)
 
         # call superclass to set timeout sockopt
         #super(WSConnection, self).open()
@@ -98,6 +104,7 @@ class WSConnection(base_socket_connection.BaseSocketConnection):
             num_sent = self._sock.send(data)
 
         result = self._sock.recv()
+        print('\n' + result)
         return num_sent
 
     @property
